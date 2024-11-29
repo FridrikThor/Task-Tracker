@@ -1,6 +1,7 @@
 package com.github.FridrikThor.task_tracker.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.github.FridrikThor.task_tracker.dto.TaskDTO;
 import com.github.FridrikThor.task_tracker.enums.TaskPriority;
 import com.github.FridrikThor.task_tracker.enums.TaskStatus;
 import jakarta.persistence.*;
@@ -10,6 +11,8 @@ import jakarta.validation.constraints.NotNull;
 
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table
@@ -46,6 +49,11 @@ public class Task {
 
     private LocalDate createdAt;
 
+    private String owner;
+
+    @ElementCollection
+    private List<String> assignees = new ArrayList<>();
+
     @Transient
     private boolean isOverDue;
 
@@ -53,14 +61,6 @@ public class Task {
     @JoinColumn(name = "project_id", nullable = false)
     @JsonBackReference
     private Project project;
-
-    public Project getProject() {
-        return project;
-    }
-
-    public void setProject(Project project) {
-        this.project = project;
-    }
 
     public Task() {
     }
@@ -71,14 +71,16 @@ public class Task {
                 TaskStatus status,
                 TaskPriority priority,
                 LocalDate dueDate,
-                LocalDate createdAt) {
+                String owner,
+                List<String> assignees) {
         this.id = id;
         this.title = title;
         this.description = description;
         this.status = status;
         this.priority = priority;
         this.dueDate = dueDate;
-        this.createdAt = createdAt;
+        this.owner = owner;
+        this.assignees = assignees;
     }
 
     public Task(String title,
@@ -86,13 +88,33 @@ public class Task {
                 TaskStatus status,
                 TaskPriority priority,
                 LocalDate dueDate,
-                LocalDate createdAt) {
+                String owner,
+                List<String> assignees) {
         this.title = title;
         this.description = description;
         this.status = status;
         this.priority = priority;
         this.dueDate = dueDate;
-        this.createdAt = createdAt;
+        this.owner = owner;
+        this.assignees = assignees;
+    }
+
+    public Task(TaskDTO taskDTO){
+        this.title = taskDTO.getTitle();
+        this.description = taskDTO.getDescription();
+        this.status = taskDTO.getStatus();
+        this.priority = taskDTO.getPriority();
+        this.dueDate = taskDTO.getDueDate();
+        this.owner = taskDTO.getOwner();
+        this.assignees = taskDTO.getAssignees();
+    }
+
+    public Project getProject() {
+        return project;
+    }
+
+    public void setProject(Project project) {
+        this.project = project;
     }
 
     public Long getId() {
@@ -147,14 +169,27 @@ public class Task {
         return createdAt;
     }
 
-    public void setCreatedAt(LocalDate createdAt) {
-        this.createdAt = createdAt;
-    }
-
     @PrePersist
     protected void onCreate() {
         this.createdAt = LocalDate.now();
     }
+
+    public String getOwner() {
+        return owner;
+    }
+
+    public void setOwner(String owner) {
+        this.owner = owner;
+    }
+
+    public List<String> getAssignees() {
+        return assignees;
+    }
+
+    public void setAssignees(List<String> assignees) {
+        this.assignees = assignees;
+    }
+
     public boolean isOverdue() {
         return dueDate != null && dueDate.isBefore(LocalDate.now());
     }

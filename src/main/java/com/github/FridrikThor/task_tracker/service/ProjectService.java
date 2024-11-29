@@ -1,5 +1,7 @@
 package com.github.FridrikThor.task_tracker.service;
 
+import com.github.FridrikThor.task_tracker.dto.ProjectDTO;
+import com.github.FridrikThor.task_tracker.enums.ProjectStatus;
 import com.github.FridrikThor.task_tracker.model.Project;
 import com.github.FridrikThor.task_tracker.repository.ProjectRepository;
 import org.springframework.stereotype.Component;
@@ -25,7 +27,7 @@ public class ProjectService {
         return projectRepository.findAll();
     }
 
-    // Add a new project
+
     public void addNewProject(Project project) {
         Optional<Project> projectOptional = projectRepository.findProjectByTitle(project.getTitle());
         if (projectOptional.isPresent()) {
@@ -34,7 +36,7 @@ public class ProjectService {
         projectRepository.save(project);
     }
 
-    // Delete a project by ID
+
     public void deleteProject(Long projectId) {
         boolean exists = projectRepository.existsById(projectId);
         if (!exists) {
@@ -42,5 +44,26 @@ public class ProjectService {
         }
         projectRepository.deleteById(projectId);
     }
+
+    public void updateProject(Long projectId, ProjectDTO projectDTO) {
+        Project project = projectRepository.findById(projectId)
+                .orElseThrow(() -> new IllegalStateException("Project not found"));
+
+        if (projectDTO.getTitle() != null) {
+            project.setTitle(projectDTO.getTitle());
+        }
+        if (projectDTO.getDescription() != null) {
+            project.setDescription(projectDTO.getDescription());
+        }
+        if (projectDTO.getStatus() != null) {
+            project.setStatus(projectDTO.getStatus());
+        }
+        if (projectDTO.getDueDate() != null) {
+            project.setDueDate(projectDTO.getDueDate());
+        }
+
+        projectRepository.save(project);
+    }
+
 
 }

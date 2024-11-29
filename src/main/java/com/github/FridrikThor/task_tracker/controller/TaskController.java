@@ -1,6 +1,8 @@
 package com.github.FridrikThor.task_tracker.controller;
 
 import com.github.FridrikThor.task_tracker.dto.TaskDTO;
+import com.github.FridrikThor.task_tracker.enums.ProjectStatus;
+import com.github.FridrikThor.task_tracker.enums.TaskStatus;
 import com.github.FridrikThor.task_tracker.model.Project;
 import com.github.FridrikThor.task_tracker.model.Task;
 import com.github.FridrikThor.task_tracker.service.ProjectService;
@@ -33,13 +35,7 @@ public class TaskController {
     @PostMapping
     public void registerNewTask(@RequestBody TaskDTO taskDTO){
         Project project = projectService.getProjectById(taskDTO.getProjectId());
-        Task task = new Task();
-        task.setTitle(taskDTO.getTitle());
-        task.setDescription(taskDTO.getDescription());
-        task.setStatus(taskDTO.getStatus());
-        task.setPriority(taskDTO.getPriority());
-        task.setDueDate(taskDTO.getDueDate());
-        task.setCreatedAt(LocalDate.now());
+        Task task = new Task(taskDTO);
         task.setProject(project);
 
         taskService.addNewTask(task);
@@ -48,5 +44,10 @@ public class TaskController {
     @DeleteMapping(path = "{taskId}")
     public void deleteTask(@PathVariable("taskId") Long taskId){
         taskService.deleteTask(taskId);
+    }
+
+    @PutMapping(path = "/{taskId}")
+    public void updateTask(@PathVariable("taskId") Long taskId, @RequestBody TaskDTO taskDTO) {
+        taskService.updateTask(taskId, taskDTO);
     }
 }

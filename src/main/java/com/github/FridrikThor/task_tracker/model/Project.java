@@ -61,14 +61,12 @@ public class Project {
                    String description,
                    ProjectStatus status,
                    LocalDate dueDate,
-                   LocalDate createdAt,
                    String owner) {
         this.id = id;
         this.title = title;
         this.description = description;
         this.status = status;
         this.dueDate = dueDate;
-        this.createdAt = createdAt;
         this.owner = owner;
     }
 
@@ -76,13 +74,11 @@ public class Project {
                     String description,
                     ProjectStatus status,
                     LocalDate dueDate,
-                    LocalDate createdAt,
                     String owner) {
         this.title = title;
         this.description = description;
         this.status = status;
         this.dueDate = dueDate;
-        this.createdAt = createdAt;
         this.owner = owner;
     }
 
@@ -130,8 +126,9 @@ public class Project {
         return createdAt;
     }
 
-    public void setCreatedAt(LocalDate createdAt) {
-        this.createdAt = createdAt;
+    @PrePersist
+    protected void onCreate() {
+        this.createdAt = LocalDate.now();
     }
 
     public String getOwner() {
@@ -144,11 +141,6 @@ public class Project {
 
     public boolean isOverdue() {
         return dueDate != null && dueDate.isBefore(LocalDate.now());
-    }
-
-    @PrePersist
-    protected void onCreate() {
-        this.createdAt = LocalDate.now();
     }
 
     public List<Task> getTasks() {
