@@ -1,14 +1,14 @@
 package com.github.FridrikThor.task_tracker.repository;
 
-import com.github.FridrikThor.task_tracker.model.User;
+import com.github.FridrikThor.task_tracker.model.Users;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
 @Repository
-public interface UserRepository extends JpaRepository<User, Long> {
+public interface UserRepository extends JpaRepository<Users, Long> {
     //Optional<User> findByUsername(String username);
-    Optional<User> findUserByEmail(String email);
-    User findByEmail(String email);
+    Optional<Users> findUserByEmail(String email);
+    Users findByEmail(String email);
 }

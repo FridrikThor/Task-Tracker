@@ -8,7 +8,7 @@ import com.github.FridrikThor.task_tracker.enums.UserRole;
 import com.github.FridrikThor.task_tracker.model.Project;
 //import com.github.FridrikThor.task_tracker.model.User;
 //import com.github.FridrikThor.task_tracker.service.UserService;
-import com.github.FridrikThor.task_tracker.model.User;
+import com.github.FridrikThor.task_tracker.model.Users;
 import com.github.FridrikThor.task_tracker.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -36,15 +36,15 @@ public class UserController {
     ));*/
 
     @GetMapping
-    public List<User> getUsers() {
+    public List<Users> getUsers() {
 
         return userService.getUsers();
         //return userService.getUsers();
     }
 
     @PostMapping
-    public ResponseEntity<User> registerNewUser(@RequestBody UserCreateDTO userCreateDTO){
-        User newUser = new User(userCreateDTO);
+    public ResponseEntity<Users> registerNewUser(@RequestBody UserCreateDTO userCreateDTO){
+        Users newUser = new Users(userCreateDTO);
         userService.registerNewUser(newUser);
         return ResponseEntity.status(HttpStatus.CREATED).body(newUser);
     }

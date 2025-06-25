@@ -5,7 +5,7 @@ import com.github.FridrikThor.task_tracker.dto.SignUpDTO;
 import com.github.FridrikThor.task_tracker.dto.UserCreateDTO;
 import com.github.FridrikThor.task_tracker.dto.UserDTO;
 import com.github.FridrikThor.task_tracker.model.Project;
-import com.github.FridrikThor.task_tracker.model.User;
+import com.github.FridrikThor.task_tracker.model.Users;
 import com.github.FridrikThor.task_tracker.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -24,8 +24,8 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
-    public void registerNewUser(User user) {
-        Optional<User> existingUser = userRepository.findUserByEmail(user.getEmail());
+    public void registerNewUser(Users user) {
+        Optional<Users> existingUser = userRepository.findUserByEmail(user.getEmail());
 
         if (existingUser.isPresent()) {
             throw new IllegalStateException("this email is being used");
@@ -51,7 +51,7 @@ public class UserService {
                 .orElseThrow(() -> new IllegalStateException("User not found"));
     }*/
 
-    public List<User> getUsers() {
+    public List<Users> getUsers() {
         return userRepository.findAll();
     }
 

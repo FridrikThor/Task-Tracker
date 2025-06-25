@@ -1,6 +1,6 @@
 package com.github.FridrikThor.task_tracker.service;
 
-import com.github.FridrikThor.task_tracker.model.User;
+import com.github.FridrikThor.task_tracker.model.Users;
 import com.github.FridrikThor.task_tracker.model.UserPrincipal;
 import com.github.FridrikThor.task_tracker.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +15,7 @@ public class MyUserDetailsService implements UserDetailsService {
     private UserRepository repo;
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = repo.findByEmail(username);
+        Users user = repo.findByEmail(username);
         if(user == null){
             System.out.println("User Not Found");
             throw new UsernameNotFoundException("user not found");

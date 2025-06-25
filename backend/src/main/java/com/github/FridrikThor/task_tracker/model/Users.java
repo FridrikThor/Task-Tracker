@@ -3,16 +3,12 @@ package com.github.FridrikThor.task_tracker.model;
 
 import com.github.FridrikThor.task_tracker.dto.UserCreateDTO;
 import com.github.FridrikThor.task_tracker.enums.UserRole;
-import com.github.FridrikThor.task_tracker.model.Project;
 import jakarta.persistence.*;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
 
 @Entity
 @Table(name="users")
-public class User {
+public class Users {
 
     @Id
     @SequenceGenerator(
@@ -42,18 +38,18 @@ public class User {
     @ManyToMany(mappedBy = "assignedUsers")
     private List<Task> tasks = new ArrayList<>();*/
 
-    public User(){
+    public Users(){
 
     }
 
-    public User(Long id, String name, String email, String password, UserRole role) {
+    public Users(Long id, String name, String email, String password, UserRole role) {
         this.id = id;
         this.name = name;
         this.email = email;
         this.password = password;
         this.role = role;
     }
-    public User(UserCreateDTO userCreateDTO){
+    public Users(UserCreateDTO userCreateDTO){
         this.name = userCreateDTO.getName();
         this.email = userCreateDTO.getEmail();
         this.password = userCreateDTO.getPassword();
@@ -118,7 +114,7 @@ public class User {
 
     @Override
     public String toString() {
-        return "User{" +
+        return "Users{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", email='" + email + '\'' +
