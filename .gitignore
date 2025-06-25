@@ -1,33 +1,132 @@
-HELP.md
-target/
-!.mvn/wrapper/maven-wrapper.jar
-!**/src/main/**/target/
-!**/src/test/**/target/
+# ========== OS / Editor Junk ==========
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+*.suo
+*.sln
+*.ntvs*
+*.njsproj
 
-### STS ###
-.apt_generated
-.classpath
-.factorypath
-.project
-.settings
-.springBeans
-.sts4-cache
-
-### IntelliJ IDEA ###
-.idea
-*.iws
+# ========== IntelliJ / VS Code ==========
+.idea/
+.vscode/
 *.iml
 *.ipr
+*.iws
+*.classpath
+*.project
+*.settings/
 
-### NetBeans ###
-/nbproject/private/
-/nbbuild/
-/dist/
-/nbdist/
-/.nb-gradle/
-build/
-!**/src/main/**/build/
-!**/src/test/**/build/
+# ========== Java / Spring Boot (backend) ==========
+backend/target/
+*.class
+*.jar
+*.war
+*.log
+hs_err_pid*
 
-### VS Code ###
-.vscode/
+# Secrets (recommended to ignore)
+backend/src/main/resources/application.properties
+backend/src/main/resources/application.yml
+
+# ========== React / Vite (frontend) ==========
+frontend/node_modules/
+frontend/dist/
+frontend/dist-ssr/
+frontend/.vite/
+
+# Env & secrets
+frontend/.env
+frontend/.env.local
+frontend/.env.*.local
+
+# ========== PostgreSQL ==========
+*.sql                  # DB dumps
+*.psql                 # Query files
+*.backup               # PostgreSQL backups
+*.pgsql                # PostgreSQL scripts
+
+# Optional: pgAdmin / database tool files
+.pgadmin/
+.dbeaver-data-sources.xml
+
+# ========== Log files ==========
+logs/
+*.log
+npm-debug.log*
+pnpm-debug.log*
+lerna-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# HELP.md
+# target/
+# !.mvn/wrapper/maven-wrapper.jar
+# !**/src/main/**/target/
+# !**/src/test/**/target/
+
+# ### STS ###
+# .apt_generated
+# .classpath
+# .factorypath
+# .project
+# .settings
+# .springBeans
+# .sts4-cache
+
+# ### IntelliJ IDEA ###
+# .idea
+# *.iws
+# *.iml
+# *.ipr
+
+# ### NetBeans ###
+# /nbproject/private/
+# /nbbuild/
+# /dist/
+# /nbdist/
+# /.nb-gradle/
+# build/
+# !**/src/main/**/build/
+# !**/src/test/**/build/
+
+# ### VS Code ###
+# .vscode/
+
+# # ---- General ----
+# .DS_Store
+# node_modules/
+# dist/
+# .env
+# .env.local
+# .env.*.local
+
+# # ---- Java / Spring Boot ----
+# backend/target/
+# *.class
+# *.jar
+# *.war
+# *.log
+# hs_err_pid*
+
+# # IntelliJ / Eclipse
+# *.iml
+# .idea/
+# *.ipr
+# *.iws
+# *.classpath
+# *.project
+# *.settings/
+
+# # ---- React (Vite or CRA) ----
+# frontend/node_modules/
+# frontend/dist/
+# frontend/.vite/
+
+# # ---- OS / Editor ----
+# Thumbs.db
+# *.swp
+# *.swo
+# .vscode/
+
