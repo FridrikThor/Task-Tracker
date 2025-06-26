@@ -30,13 +30,8 @@ public class UserController {
     }
 
 
-
-    /*private List<User> users = new ArrayList<>(List.of(
-            new User(1L, "Fridrik", "f@gmail.com", "thor", UserRole.ADMIN)
-    ));*/
-
     @GetMapping
-    public List<Users> getUsers() {
+    public List<UserDTO> getUsers() {
 
         return userService.getUsers();
         //return userService.getUsers();
@@ -47,6 +42,11 @@ public class UserController {
         Users newUser = new Users(userCreateDTO);
         userService.registerNewUser(newUser);
         return ResponseEntity.status(HttpStatus.CREATED).body(newUser);
+    }
+
+    @PostMapping("/login")
+    public String login(@RequestBody Users user){
+        return userService.verify(user);
     }
 
     /*private final UserService userService;

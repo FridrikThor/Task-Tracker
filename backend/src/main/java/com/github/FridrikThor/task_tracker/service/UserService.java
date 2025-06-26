@@ -8,11 +8,16 @@ import com.github.FridrikThor.task_tracker.model.Project;
 import com.github.FridrikThor.task_tracker.model.Users;
 import com.github.FridrikThor.task_tracker.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class UserService {
@@ -24,12 +29,22 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
+    @Autowired
+    AuthenticationManager authenticationManager;
+
+    @Autowired
+    private JWTService jwtService;
+
+    private BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(12);
+
     public void registerNewUser(Users user) {
         Optional<Users> existingUser = userRepository.findUserByEmail(user.getEmail());
 
         if (existingUser.isPresent()) {
             throw new IllegalStateException("this email is being used");
         }
+
+        user.setPassword(encoder.encode(user.getPassword()));
 
 
 
@@ -51,8 +66,10 @@ public class UserService {
                 .orElseThrow(() -> new IllegalStateException("User not found"));
     }*/
 
-    public List<Users> getUsers() {
-        return userRepository.findAll();
+    public List<UserDTO> getUsers() {
+        return userRepository.findAll().stream()
+                .map(UserDTO::new)
+                .collect(Collectors.toList());
     }
 
     public void deleteUser(Long userId) {
@@ -61,6 +78,14 @@ public class UserService {
             throw new IllegalStateException("project with id " + userId + " does not exist");
         }
         userRepository.deleteById(userId);
+    }
+
+    public String verify(Users user) {
+        Authentication authentication =
+                authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(user.getEmail(), user.getPassword()));
+        if(authentication.isAuthenticated())
+            return jwtService.generateToken(user.getEmail());
+        return "fail";
     }
 }
 

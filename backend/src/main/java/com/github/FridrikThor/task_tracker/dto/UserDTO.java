@@ -1,6 +1,9 @@
 package com.github.FridrikThor.task_tracker.dto;
 
 import com.github.FridrikThor.task_tracker.enums.UserRole;
+import com.github.FridrikThor.task_tracker.model.Users;
+
+import java.util.List;
 
 public class UserDTO {
     private Long id;
@@ -8,6 +11,13 @@ public class UserDTO {
     private String name;
     private String email;
     private UserRole role;
+
+    public UserDTO(Users user) {
+        this.id = user.getId();
+        this.name = user.getName();
+        this.email = user.getEmail();
+        this.role = user.getRole();
+    }
 
     public Long getId() {
         return id;
