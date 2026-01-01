@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping(path = "api/v1/project")
+//@RequestMapping(path = "api/v1/project")
 public class ProjectController {
 
     private final ProjectService projectService;
@@ -23,18 +23,17 @@ public class ProjectController {
         this.projectService = projectService;
     }
 
-    @GetMapping
+    @GetMapping("/projects")
     public List<Project> getProjects() {
         return projectService.getProjects();
     }
 
-    @GetMapping("/ping")
-    public String ping() {
-        return "pong";
+    @GetMapping("/String")
+    public String strengur(){
+        return "Vel gert!";
     }
 
-
-    @PostMapping
+    @PostMapping("/newProject")
     public ResponseEntity<Project> registerNewProject(@RequestBody ProjectDTO projectDTO) {
         Project newProject = new Project(projectDTO);
         projectService.addNewProject(newProject);
@@ -42,13 +41,13 @@ public class ProjectController {
         return ResponseEntity.status(HttpStatus.CREATED).body(newProject);
     }
 
-    @DeleteMapping(path = "{projectId}")
-    public void deleteProject(@PathVariable("projectId") Long projectId) {
+    @DeleteMapping("/projectId")
+    public void deleteProject(Long projectId) {
         projectService.deleteProject(projectId);
     }
 
-    @PutMapping(path = "{projectId}")
-    public ResponseEntity<Project> updateProject(@PathVariable("projectId") Long projectId, @RequestBody ProjectDTO projectDTO) {
+    @PutMapping("/projectId")
+    public ResponseEntity<Project> updateProject(Long projectId, @RequestBody ProjectDTO projectDTO) {
         Project updatedProject = projectService.updateProject(projectId, projectDTO);
         return ResponseEntity.ok(updatedProject);
     }

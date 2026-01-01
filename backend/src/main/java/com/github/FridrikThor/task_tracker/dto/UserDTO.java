@@ -9,15 +9,16 @@ public class UserDTO {
     private Long id;
 
     private String name;
-    private String email;
+    private String username;
     private UserRole role;
 
     public UserDTO(Users user) {
         this.id = user.getId();
         this.name = user.getName();
-        this.email = user.getEmail();
+        this.username = user.getUsername();
         this.role = user.getRole();
     }
+
 
     public Long getId() {
         return id;
@@ -27,12 +28,12 @@ public class UserDTO {
         this.id = id;
     }
 
-    public String getEmail() {
-        return email;
+    public String getUsername() {
+        return username;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public String getName() {

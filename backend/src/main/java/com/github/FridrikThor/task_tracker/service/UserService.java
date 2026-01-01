@@ -1,10 +1,7 @@
 package com.github.FridrikThor.task_tracker.service;
 
-
-import com.github.FridrikThor.task_tracker.dto.SignUpDTO;
-import com.github.FridrikThor.task_tracker.dto.UserCreateDTO;
+import com.github.FridrikThor.task_tracker.dto.LoginDTO;
 import com.github.FridrikThor.task_tracker.dto.UserDTO;
-import com.github.FridrikThor.task_tracker.model.Project;
 import com.github.FridrikThor.task_tracker.model.Users;
 import com.github.FridrikThor.task_tracker.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,20 +11,13 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
-import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 public class UserService {
 
-    private final UserRepository userRepository;
-
     @Autowired
-    public UserService(UserRepository userRepository) {
-        this.userRepository = userRepository;
-    }
+    private UserRepository userRepository;
 
     @Autowired
     AuthenticationManager authenticationManager;
@@ -38,7 +28,7 @@ public class UserService {
     private BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(12);
 
     public void registerNewUser(Users user) {
-        Optional<Users> existingUser = userRepository.findUserByEmail(user.getEmail());
+        Optional<Users> existingUser = userRepository.findUserByUsername(user.getUsername());
 
         if (existingUser.isPresent()) {
             throw new IllegalStateException("this email is being used");
@@ -61,16 +51,19 @@ public class UserService {
     }
 
 
-    /*public User getUserByUsername(String username) {
-        return userRepository.findByUsername(username)
-                .orElseThrow(() -> new IllegalStateException("User not found"));
-    }*/
+    public Users getUserByUsername(String username) {
+        /*return userRepository.findByUsername(username)
+                .orElseThrow(() -> new IllegalStateException("User not found"));*/
 
-    public List<UserDTO> getUsers() {
+        Optional<Users> existingUser = userRepository.findUserByUsername(username);
+
+        return existingUser.orElseThrow(() -> new IllegalStateException("User not found"));
+    }
+   /* public List<UserDTO> getUsers() {
         return userRepository.findAll().stream()
                 .map(UserDTO::new)
                 .collect(Collectors.toList());
-    }
+    }*/
 
     public void deleteUser(Long userId) {
         boolean exists = userRepository.existsById(userId);
@@ -80,12 +73,13 @@ public class UserService {
         userRepository.deleteById(userId);
     }
 
-    public String verify(Users user) {
+    public String verify(LoginDTO user){
         Authentication authentication =
-                authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(user.getEmail(), user.getPassword()));
-        if(authentication.isAuthenticated())
-            return jwtService.generateToken(user.getEmail());
-        return "fail";
+                authenticationManager.authenticate(
+                        new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword()));
+        if(authentication.isAuthenticated()){
+            return jwtService.generateToken(user.getUsername());
+        }
+        return "Failure";
     }
 }
-

@@ -1,7 +1,7 @@
 package com.github.FridrikThor.task_tracker.controller;
 
+import com.github.FridrikThor.task_tracker.dto.LoginDTO;
 import com.github.FridrikThor.task_tracker.dto.ProjectDTO;
-import com.github.FridrikThor.task_tracker.dto.SignUpDTO;
 import com.github.FridrikThor.task_tracker.dto.UserCreateDTO;
 import com.github.FridrikThor.task_tracker.dto.UserDTO;
 import com.github.FridrikThor.task_tracker.enums.UserRole;
@@ -9,17 +9,25 @@ import com.github.FridrikThor.task_tracker.model.Project;
 //import com.github.FridrikThor.task_tracker.model.User;
 //import com.github.FridrikThor.task_tracker.service.UserService;
 import com.github.FridrikThor.task_tracker.model.Users;
+import com.github.FridrikThor.task_tracker.service.MyUserDetailsService;
 import com.github.FridrikThor.task_tracker.service.UserService;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.web.csrf.CsrfToken;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping(path = "api/v1/user")
+//@CrossOrigin
+//@CrossOrigin(origins = "http://localhost:5173")
+//@RequestMapping(path = "user")
 public class UserController {
 
     private final UserService userService;
@@ -30,12 +38,35 @@ public class UserController {
     }
 
 
-    @GetMapping
-    public List<UserDTO> getUsers() {
+    /*@GetMapping("/users")
+    public List<UserDTO> getUsers(@RequestBody UserDTO user) {
 
-        return userService.getUsers();
+        return userService.getUsers(user);
         //return userService.getUsers();
+    }*/
+    @GetMapping("/me")
+    public ResponseEntity<UserDTO> getCurrentUser(Authentication authentication) {
+        if (authentication == null || !authentication.isAuthenticated()) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+
+        String username = authentication.getName();
+
+        Users user = userService.getUserByUsername(username);
+        System.out.println("þetta eru print lína "+user.getRole());
+
+        // You can return only the safe info
+        UserDTO userDTO = new UserDTO(user);
+
+        return ResponseEntity.ok(userDTO);
     }
+
+
+    /*@GetMapping("/user")
+    public List<UserDTO> getUser(@RequestBody UserDTO user) {
+        return userService.get
+        //return userService.getUsers();
+    }*/
 
     @PostMapping
     public ResponseEntity<Users> registerNewUser(@RequestBody UserCreateDTO userCreateDTO){
@@ -44,47 +75,9 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.CREATED).body(newUser);
     }
 
-    @PostMapping("/login")
-    public String login(@RequestBody Users user){
-        return userService.verify(user);
+    @PostMapping("/innskra")
+    public Map<String, String> innskra(@RequestBody LoginDTO user){
+        return Map.of("token", userService.verify(user));
     }
-
-    /*private final UserService userService;
-
-    @Autowired
-    public UserController(UserService userService) {
-        this.userService = userService;
-    }
-
-    @GetMapping
-    public List<User> getUsers() {
-        return userService.getUsers();
-    }
-
-    @PostMapping
-    public ResponseEntity<User> registerUser(@RequestBody SignUpDTO signUpDTO) {
-        User newUser = userService.registerNewUser(signUpDTO);
-        return ResponseEntity.status(HttpStatus.CREATED).body(newUser);
-    }
-
-    @DeleteMapping(path = "{userId}")
-    public void deleteUser(@PathVariable("userId") Long userId) {
-        userService.deleteUser(userId);
-    }
-
-@GetMapping("/{username}")
-    public ResponseEntity<UserDTO> getUser(@PathVariable UserDTO userDTO) {
-        User user = userService.getUserByUsername(username);
-        UserDTO userDTO = new UserDTO(user.getUsername(), user.getEmail(), user.getFullName());
-        return ResponseEntity.ok(userDTO);
-    }
-
-@PutMapping(path = "{userId}")
-    public ResponseEntity<User> updateUser(@PathVariable("userId") Long userId, @RequestBody UserDTO userDTO) {
-        User updatedUser = userService.updateUser(userId, userDTO);
-        return ResponseEntity.ok(updatedUser);
-    }*/
-
-
 }
 

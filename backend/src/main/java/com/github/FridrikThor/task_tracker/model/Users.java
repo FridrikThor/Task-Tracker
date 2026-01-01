@@ -23,7 +23,7 @@ public class Users {
     private Long id;
 
     private String name;
-    private String email;
+    private String username;
     private String password;
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
@@ -42,16 +42,16 @@ public class Users {
 
     }
 
-    public Users(Long id, String name, String email, String password, UserRole role) {
+    public Users(Long id, String name, String username, String password, UserRole role) {
         this.id = id;
         this.name = name;
-        this.email = email;
+        this.username = username;
         this.password = password;
         this.role = role;
     }
     public Users(UserCreateDTO userCreateDTO){
         this.name = userCreateDTO.getName();
-        this.email = userCreateDTO.getEmail();
+        this.username = userCreateDTO.getUsername();
         this.password = userCreateDTO.getPassword();
         this.role = userCreateDTO.getRole();
     }
@@ -72,12 +72,12 @@ public class Users {
         this.password = password;
     }
 
-    public String getEmail() {
-        return email;
+    public String getUsername() {
+        return username;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public String getName() {
@@ -117,7 +117,7 @@ public class Users {
         return "Users{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
-                ", email='" + email + '\'' +
+                ", username='" + username + '\'' +
                 ", password='" + password + '\'' +
                 ", role=" + role +
                 ", createdAt=" + createdAt +
