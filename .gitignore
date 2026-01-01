@@ -1,6 +1,6 @@
 # ========== OS / Editor Junk ==========
-.DS_Store
-Thumbs.db
+*.DS_Store
+*.Thumbs.db
 *.swp
 *.swo
 *.suo
@@ -9,8 +9,8 @@ Thumbs.db
 *.njsproj
 
 # ========== IntelliJ / VS Code ==========
-.idea/
-.vscode/
+*.idea/
+*.vscode/
 *.iml
 *.ipr
 *.iws
